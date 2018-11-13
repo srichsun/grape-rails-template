@@ -25,9 +25,47 @@ module API
       end
 
       # /api/blogs/2
-      # 如果不對id做限制，下面blogs/hot永遠讀不到
-      get ':id', requirements: { id: /\d+/} do
+      desc "獲取blog詳情"
+      params do
+        requires :id, type: Integer
+      end
+      get ':id', requirements: { id: /\d+/} do# 如果不對id做限制，下面blogs/hot永遠讀不到
         "id #{params[:id]}"
+      end
+
+      desc "create a blog" # desc 用來生成文檔用
+      params do # 定義params，當post下面時，會檢查是不是符合這邊條件
+        requires :title, type: String, desc: "博客标题" # requires表示必要參數
+        requires :content, type: String, desc: "博客内容", as: :body
+
+        optional :tags, type: Array, desc: "博客标签", allow_blank: false # optional表示可選參數
+        optional :state, type: Symbol, default: :pending, values: [:pending, :done]
+        # 參數其實只有string，symbol是說grape會幫轉為symbol
+        # 當沒傳值就用default的值
+        # values表示進來的值只能是這些
+
+        optional :meta_name, type: { value: String, message: "meta_name比必须为字符串" },
+        regexp: /^s\-/
+        # 當校驗不是string，返回message，方便做i18n用的
+        # 如果type過了，還要檢查是不是符合regexp
+        # 如果想要對regexp做i18n，可寫成 regexp: { value: /^s\-/, message: '不合法' }
+
+        optional :cover, type: File
+        given :cover do #given表示如果cover有提供值
+          requires :weight, type: Integer, values: { value: ->(v) { v >= -1 }, message: "weight必须大于等于-1" } #自定義proc來檢查
+        end
+
+        # 一個array，裡面都是hash
+        optional :comments, type: Array do
+          requires :content, type: String, allow_blank: false # 代表array裡面每一個object都要有content這個參數
+        end
+
+        optional :category, type: Hash do
+          requires :id, type: Integer
+        end
+      end
+      post do
+        params
       end
 
       # 在body的 form-data加key value就可以加表單數據
