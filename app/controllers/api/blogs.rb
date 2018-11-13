@@ -10,6 +10,16 @@ module API
     #grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
     resources :blogs do
+
+      # /blogs/3/comments
+      route_param :id do
+        resources :comments do
+          get do
+            " blog #{params[:id]} comments"
+          end
+        end
+      end
+
       get do # 就是 get '/' /api/blogs
         {blogs: []}
       end
