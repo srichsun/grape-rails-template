@@ -5,6 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'grape', '~> 1.0.1'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
+gem 'grape_on_rails_routes'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
