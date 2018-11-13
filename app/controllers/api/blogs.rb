@@ -25,7 +25,8 @@ module API
       end
 
       # /api/blogs/2
-      get ':id' do
+      # 如果不對id做限制，下面blogs/hot永遠讀不到
+      get ':id', requirements: { id: /\d+/} do
         "id #{params[:id]}"
       end
 
@@ -41,6 +42,11 @@ module API
       # delete /api/blogs/4
       delete ':id' do
         "delete #{params[:id]}"
+      end
+
+      # blogs/hot/pop/3， /pop/3是可選參數，（）代表可有可無
+      get 'hot(/pop/(:id))' do
+        "hot #{params[:id]}"
       end
     end
   end
