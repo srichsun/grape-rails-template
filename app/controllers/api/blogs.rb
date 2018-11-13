@@ -7,22 +7,31 @@ module API
 
     default_format :json
 
-    get '/' do
-      'blogs/index'
+    #grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
+    # namespace, resource, group, segment 功能都一樣，給命名空間
+    resources :blogs do
+      get do # 就是 get '/' /api/blogs
+        {blogs: []}
+      end
+
+      # /api/blogs/2
+      get ':id' do
+        "id #{params[:id]}"
+      end
+
+      # 在body的 form-data加key value就可以加表單數據
+      post do
+        "post #{params}"
+      end
+
+      put ':id' do
+        "put #{params[:id]}"
+      end
+
+      # delete /api/blogs/4
+      delete ':id' do
+        "delete #{params[:id]}"
+      end
     end
-    # 從Console測試
-    # curl 'http://localhost:3000/api' 就是訪問
-    # 會回'blogs/index'
-    # 加-i 查看更多訊息，grape會依照副檔名回對應格式
-    # curl -i 'http://localhost:3000/api.txt'
-
-    # 如果是從瀏覽器測試
-    # 要手動指定請求格式，讓Grape知道 http://localhost:3000/api.json 或api.text
-    # 如果輸入http://localhost:3000/api 會error
-    # 從Network ->Headers -> Request Headers 可以看到accept的是application/xml等
-
-    # 用Postman測試
-    # 如果Request Headers 有加KEY VALUE是 Accept text/plain
-    # 回來的Headers可以看到Content-type就會變成text/plain
   end
 end
