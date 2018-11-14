@@ -7,7 +7,15 @@ module API
 
     default_format :json
 
-    #grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
+    # Grape的helper是說讓下面API的block可以用
+    helpers do
+      # 默認接收兩個參數code: 0 代表成功，1代表失敗, data代表API有意義返回值
+      def build_response code: 0, data: nil
+        { code: code, data: data }
+      end
+    end
+
+    # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
     resources :blogs do
 
@@ -15,13 +23,13 @@ module API
       route_param :id do
         resources :comments do
           get do
-            " blog #{params[:id]} comments"
+            build_response(data: " blog #{params[:id]} comments")
           end
         end
       end
 
       get do # 就是 get '/' /api/blogs
-        {blogs: []}
+        build_response(data: {blogs: []})
       end
 
       # /api/blogs/2
@@ -30,7 +38,7 @@ module API
         requires :id, type: Integer
       end
       get ':id', requirements: { id: /\d+/} do# 如果不對id做限制，下面blogs/hot永遠讀不到
-        "id #{params[:id]}"
+        build_response(data: "id #{params[:id]}")
       end
 
       desc "create a blog" # desc 用來生成文檔用
@@ -64,27 +72,24 @@ module API
           requires :id, type: Integer
         end
       end
-      post do
-        params
-      end
 
       # 在body的 form-data加key value就可以加表單數據
       post do
-        "post #{params}"
+        build_response(data: "post #{params}")
       end
 
       put ':id' do
-        "put #{params[:id]}"
+        build_response(data: "put #{params[:id]}")
       end
 
       # delete /api/blogs/4
       delete ':id' do
-        "delete #{params[:id]}"
+        build_response(data: "delete #{params[:id]}")
       end
 
       # blogs/hot/pop/3， /pop/3是可選參數，（）代表可有可無
       get 'hot(/pop/(:id))' do
-        "hot #{params[:id]}"
+        build_response(data: "hot #{params[:id]}")
       end
 
       get 'latest' do
@@ -93,7 +98,7 @@ module API
 
       get 'popular' do
         status 400 #POSTMAN 就會看到status 400
-        'popular'
+        build_response(data: 'popular')
       end
     end
   end
