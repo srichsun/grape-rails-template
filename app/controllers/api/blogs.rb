@@ -86,6 +86,15 @@ module API
       get 'hot(/pop/(:id))' do
         "hot #{params[:id]}"
       end
+
+      get 'latest' do
+        redirect '/api/blogs/popular' #redirect會把path返回瀏覽器，要給完整URL，前面杳有/api/
+      end
+
+      get 'popular' do
+        status 400 #POSTMAN 就會看到status 400
+        'popular'
+      end
     end
   end
 end
