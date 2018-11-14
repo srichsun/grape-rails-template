@@ -3,23 +3,26 @@
 #   class Blogs
 
 module API
+  module V1 # 新增這層
   class Blogs < Grape::API
+    include Default # 完成初始化準備工作，把下面這些都收到裡面去
 
-    default_format :json
-
-    # Grape的helper是說讓下面API的block可以用
-    helpers do
-      # 默認接收兩個參數code: 0 代表成功，1代表失敗, data代表API有意義返回值
-      def build_response code: 0, data: nil
-        { code: code, data: data }
-      end
-
-      params :id_validator do
-        requires :id, type: Integer
-      end
-      # params :id_validator do |options| 以可以像這樣接收參數
-      # use :id_validator, a: 1 像這樣傳一個hash進去
-    end
+    # 收到api/v1/default.rb
+    # default_format :json
+    #
+    # # Grape的helper是說讓下面API的block可以用
+    # helpers do
+    #   # 默認接收兩個參數code: 0 代表成功，1代表失敗, data代表API有意義返回值
+    #   def build_response code: 0, data: nil
+    #     { code: code, data: data }
+    #   end
+    #
+    #   params :id_validator do
+    #     requires :id, type: Integer
+    #   end
+    #   # params :id_validator do |options| 以可以像這樣接收參數
+    #   # use :id_validator, a: 1 像這樣傳一個hash進去
+    # end
 
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
@@ -118,19 +121,20 @@ module API
       end
     end
 
-    # 要寫在所有API的後面
-    add_swagger_documentation(
-      info: {
-        title: 'GrapeRailsTemplate API Documentation',
-        contact_email: 'service@eggman.tv'
-      },
-
-      # 添加API路由，
-      # 因為其實整個API是掛在/api上，(在route: mount API::Blogs, at: '/api')
-      # 實際路徑是 api/doc/swagger
-      # 這邊要跟swagger.rb o.url = '/api/doc/swagger' 設置的相同
-      mount_path: '/doc/swagger',
-      doc_version: '0.1.0'
-    )
+    # 收到base.rb
+    # # 要寫在所有API的後面
+    # add_swagger_documentation(
+    #   info: {
+    #     title: 'GrapeRailsTemplate API Documentation',
+    #     contact_email: 'service@eggman.tv'
+    #   },
+    #
+    #   # 添加API路由，
+    #   # 因為其實整個API是掛在/api上，(在route: mount API::Blogs, at: '/api')
+    #   # 實際路徑是 api/doc/swagger
+    #   # 這邊要跟swagger.rb o.url = '/api/doc/swagger' 設置的相同
+    #   mount_path: '/doc/swagger',
+    #   doc_version: '0.1.0'
+    # )
   end
 end
