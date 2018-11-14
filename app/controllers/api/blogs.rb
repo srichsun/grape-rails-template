@@ -13,6 +13,12 @@ module API
       def build_response code: 0, data: nil
         { code: code, data: data }
       end
+
+      params :id_validator do
+        requires :id, type: Integer
+      end
+      # params :id_validator do |options| 以可以像這樣接收參數
+      # use :id_validator, a: 1 像這樣傳一個hash進去
     end
 
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
@@ -35,7 +41,7 @@ module API
       # /api/blogs/2
       desc "獲取blog詳情"
       params do
-        requires :id, type: Integer
+        use :id_validator
       end
       get ':id', requirements: { id: /\d+/} do# 如果不對id做限制，下面blogs/hot永遠讀不到
         build_response(data: "id #{params[:id]}")
@@ -78,8 +84,18 @@ module API
         build_response(data: "post #{params}")
       end
 
+      desc 'blog修改'
+      params do
+        use :id_validator
+      end
+
       put ':id' do
         build_response(data: "put #{params[:id]}")
+      end
+
+      desc 'blog刪除'
+      params do
+        use :id_validator
       end
 
       # delete /api/blogs/4
