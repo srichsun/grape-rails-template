@@ -108,7 +108,7 @@ module API
         build_response(data: "hot #{params[:id]}")
       end
 
-      get 'latest' do
+      get 'latest', hidden: true do
         redirect '/api/blogs/popular' #redirect會把path返回瀏覽器，要給完整URL，前面杳有/api/
       end
 
