@@ -136,5 +136,6 @@ module API
     #   mount_path: '/doc/swagger',
     #   doc_version: '0.1.0'
     # )
+    end
   end
 end
