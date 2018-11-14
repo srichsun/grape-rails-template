@@ -117,5 +117,20 @@ module API
         build_response(data: 'popular')
       end
     end
+
+    # 要寫在所有API的後面
+    add_swagger_documentation(
+      info: {
+        title: 'GrapeRailsTemplate API Documentation',
+        contact_email: 'service@eggman.tv'
+      },
+
+      # 添加API路由，
+      # 因為其實整個API是掛在/api上，(在route: mount API::Blogs, at: '/api')
+      # 實際路徑是 api/doc/swagger
+      # 這邊要跟swagger.rb o.url = '/api/doc/swagger' 設置的相同
+      mount_path: '/doc/swagger',
+      doc_version: '0.1.0'
+    )
   end
 end
