@@ -3,6 +3,7 @@
 module API
   class Base < Grape::API
     mount V1::Blogs #把api/blogs.rb mount進來，Grape支援不同api class互相掛載
+    mount V1::Users
 
     add_swagger_documentation(
       info: {
