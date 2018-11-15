@@ -24,6 +24,26 @@ module API
     #   # use :id_validator, a: 1 像這樣傳一個hash進去
     # end
 
+    # 請求之前或之後處理
+    before do
+    end
+    after do
+    end
+
+    # 在params校驗之前處理
+    before_validation do
+    end
+    after_validation do
+    end
+
+    # 順序：
+    # before
+    # before_validation
+    # params
+    # after_validation
+    # api方法
+    # after
+
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
     resources :blogs do
