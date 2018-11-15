@@ -24,6 +24,15 @@ module API
     #   # use :id_validator, a: 1 像這樣傳一個hash進去
     # end
 
+    rescue_from ActiveRecord::RecordNotFound do |e|
+      error!({code: 1, error: 'not fould'}, 404)
+    end
+
+    rescue_from NoMethodError do |e|
+      error!({code: 1, error: 'system error'}, 422)
+    end
+    # rescue_from :all 抓對全部api的例外
+
     # grape提供基於HTTP的認證，但這少用
     # http_basic do |username, password|
     #   username == 'test' and password == 'hello'
@@ -64,6 +73,13 @@ module API
     # api方法
     # after
     # 不一定會每個都執行，譬如如果params校驗就失敗，就不會再執行after_validation跟after
+
+    # 只針對部分api路徑加上版本
+    version 'v10', using: :path do
+      get '/test/filter' do
+        raise NoMethodError
+      end
+    end
 
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
