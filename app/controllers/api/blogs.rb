@@ -7,6 +7,10 @@ module API
 
     default_format :json
 
+    version 'v1', using: :path
+    # 全域方式，針對下面全部api路徑，加上/v1/
+    # 譬如原本是api/test/filter，就變成api/v1/test/filter
+
     # Grape的helper是說讓下面API的block可以用
     helpers do
       # 默認接收兩個參數code: 0 代表成功，1代表失敗, data代表API有意義返回值
@@ -19,6 +23,24 @@ module API
       end
       # params :id_validator do |options| 以可以像這樣接收參數
       # use :id_validator, a: 1 像這樣傳一個hash進去
+    end
+
+    # 因為上面version加了v1, 所以api/v1/test/filter
+    get '/test/filter' do
+      'v1 /test/filter'
+    end
+
+    # 只針對部分api路徑加上版本
+    version 'v2', using: :path do
+      get '/test/filter' do
+        'v2 test filter'
+      end
+    end
+
+    version 'v3', using: :path do
+      get '/test/filter' do
+        'v3 test filter'
+      end
     end
 
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
