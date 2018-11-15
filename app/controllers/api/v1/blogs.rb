@@ -26,6 +26,8 @@ module API
 
     # 請求之前或之後處理
     before do
+      @variable = nil
+      # 在filter的實例變數，下面所有action都可以拿到
     end
     after do
     end
@@ -43,10 +45,13 @@ module API
     # after_validation
     # api方法
     # after
+    # 不一定會每個都執行，譬如如果params校驗就失敗，就不會再執行after_validation跟after
 
     # grape 裡面resources只是給命名空間/blogs，沒有自動生成路由
     # namespace, resource, group, segment 功能都一樣，給命名空間
     resources :blogs do
+      # 如果filter寫在namespace, resource(s), group, segment作用域裡面
+      # 就只有在這裡面的action會用到
 
       # /blogs/3/comments
       route_param :id do
