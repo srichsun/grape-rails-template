@@ -24,6 +24,24 @@ module API
     #   # use :id_validator, a: 1 像這樣傳一個hash進去
     # end
 
+    # grape提供基於HTTP的認證，但這少用
+    # http_basic do |username, password|
+    #   username == 'test' and password == 'hello'
+    # end
+    # 沒提供帳密，從postman測試，會看到401 unauthorized
+    # 要去authorization那邊輸入
+
+    # postman 那邊header KEY VALUE要加 'X-Api-Secret-Key', 'api_secret_key'
+    # grape會把-分隔的第一個字母變大寫，所以Postman key寫x-api-secret-key也會過
+    before do
+      # byebug去看進來參數
+      unless request.headers['X-Api-Secret-Key'] == 'api_secret_key'
+        # error!表示直接返回錯誤
+        # error! 'forbidden', 403
+        error!({code: 1, message: 'forbidden'}, 403)
+      end
+    end
+
     # 請求之前或之後處理
     before do
       @variable = nil
