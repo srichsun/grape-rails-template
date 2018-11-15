@@ -23,3 +23,13 @@ API軟知識
 - 狀態碼：status code
 - 文檔：documentation
 - 流量控制：access flow control（業務層面）
+
+Route調試
+---
+
+1. `` API::Base.routes``可以看到所有路由
+
+2. ``API::Base.recognize_path '/v1/blogs'``可以判斷這個路由可不可用
+
+4. 裝了``gem 'grape_on_rails_routes'``
+就可以用``rails grape:routes``看到routes
