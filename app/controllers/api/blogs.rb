@@ -5,6 +5,17 @@
 module API
   class Blogs < Grape::API
 
+    # Grape依照request的後綴.json等，或者是request的header的accept想要的type
+    # 格式化請求格式返回
+
+    # 默認grape已經支持以下格式，可以註釋掉
+    # content_type :json, 'application/json'
+    # content_type :xml, 'application/xml'
+    # content_type :text, 'text/plain'
+    # content_type :binary, 'application/octet-stream'
+    # 如果說有聲明，譬如說content_type :xml沒註釋，代表其他三個不支援，會返回default的json
+
+    # 如果client沒有要求格式，或這邊也不支援，就返回json
     default_format :json
 
     version 'v1', using: :path
